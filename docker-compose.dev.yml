@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  mongo:
+    image: mongo:4.4
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_configdb:/data/configdb
+      - mongo_db:/data/db
+
+  hackmd:
+    build:
+      context: ./hackmd
+    environment:
+      - GROWI_URI=http://localhost:3000
+      # define 'storage' option value
+      # see https://github.com/sequelize/cli/blob/7160d0/src/helpers/config-helper.js#L192
+      - CMD_DB_URL=sqlite://dummyhost/hackmd/sqlite/codimd.db
+      - CMD_CSP_ENABLE=false
+    ports:
+      - 3010:3000
+    volumes:
+      - sqlite_db:/files/sqlite
+
+volumes:
+  mongo_configdb:
+  mongo_db:
+  sqlite_db:
