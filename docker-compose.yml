@@ -26,7 +26,6 @@ services:
 
     command: "dockerize
       -wait tcp://mongo:27017
-      -wait tcp://elasticsearch:9200
       -timeout 60s
       npm run server:prod"
     restart: unless-stopped
