@@ -1,15 +1,24 @@
 FROM weseek/growi:4
-LABEL maintainer Yuki Takei <yuki@weseek.co.jp>
+# LABEL maintainer Yuki Takei <yuki@weseek.co.jp>
+LABEL modified_by Taichi Masuyama <montanha.masu536@gmail.com>
 
 ENV APP_DIR /opt/growi
 
 # install dockerize
 ENV DOCKERIZE_VERSION v0.6.1
 USER root
-RUN apk add --no-cache --virtual .dl-deps curl \
-    && curl -sL https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-        | tar -xz -C /usr/local/bin \
-    && apk del .dl-deps
+
+RUN set -ex \
+    && COMMANDS=" \
+    wget \
+    " \
+    && apt-get update && apt-get install -y --no-install-recommends $COMMANDS \
+    && wget --no-check-certificate https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $COMMANDS \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR ${APP_DIR}
 
