@@ -1,4 +1,4 @@
-FROM weseek/growi:4
+FROM weseek/growi:4.3.1
 # LABEL maintainer Yuki Takei <yuki@weseek.co.jp>
 LABEL modified_by Taichi Masuyama <montanha.masu536@gmail.com>
 
